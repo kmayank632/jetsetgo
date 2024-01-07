@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, Text, View} from 'react-native';
+import {ActivityIndicator, FlatList, Text, View} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import {CustomTheme} from '../../../utils/theme/CustomTheme';
 import getStyles from './styles';
@@ -78,14 +78,14 @@ const Flights = ({navigation, route}: any) => {
   const dispatch = useDispatch();
   const flights = useSelector((state: RootState) => state.FLIGHTS);
 
+  const loading = useSelector((state: RootState) => state.FLIGHTS.isLoader);
+
   // Fetch flights on component mount
   useEffect(() => {
     dispatch(fetchFlights() as any);
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(date);
-
     const sourceAirportCode = fromCode;
     const destinationAirportCode = toCode;
 
@@ -292,6 +292,9 @@ const Flights = ({navigation, route}: any) => {
               }}>
               No Flight Found
             </Text>
+            {!list.length && loading && (
+              <ActivityIndicator size={'small'} color={theme.colors.primary} />
+            )}
           </View>
         )}
       </View>
